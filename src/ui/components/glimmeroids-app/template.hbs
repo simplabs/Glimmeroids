@@ -10,10 +10,10 @@
       {{#if (eq state.gameState GameState.GameOver)}}
         <p>Game over, man!</p>
         <p>{{gameOverMessage}}</p>
-      {{else}}
-        <h1 class="logo">Glimmeroids</h1>
+        {{#if prizeMessage}}
+          <p class="prize">{{{prizeMessage}}}</p>
+        {{/if}}
       {{/if}}
-
       <button onclick={{action startGame}}>
         {{if (eq state.gameState GameState.GameOver) "try again?" "start the game"}}
       </button>

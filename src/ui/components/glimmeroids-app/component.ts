@@ -24,6 +24,8 @@ enum GameState {
   GameOver,
 }
 
+const PRIZE_THRESHOLD = 3000;
+
 export interface GlimmeroidsState {
   screen: {
     width: number,
@@ -90,9 +92,18 @@ export default class Glimmeroids extends Component {
     if (this.state.currentScore <= 0) {
       return '0 points... So sad.';
     } else if (this.state.currentScore >= this.state.topScore) {
-      return 'Top score with ' + this.state.currentScore + ' points. Woo!';
+      return 'New top score with ' + this.state.currentScore + ' points. Woo!';
     } else {
       return this.state.currentScore + ' Points though :)';
+    }
+  }
+
+  @tracked('state')
+  get prizeMessage() {
+    if (this.state.currentScore >= PRIZE_THRESHOLD) {
+      return `You win an Ember.js T-Shirt or mascot for scoring more than ${PRIZE_THRESHOLD} points!`;
+    } else {
+      return null;
     }
   }
 
