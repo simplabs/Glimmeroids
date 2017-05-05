@@ -15,6 +15,7 @@
         {{/if}}
       {{else}}
         <h1 class="logo">Glimmeroids</h1>
+        <p>Score {{PRIZE_THRESHOLD}} points and win an Ember.js T-Shirt or Tomster mascot!</p>
       {{/if}}
       <button onclick={{action startGame}}>
         {{if (eq state.gameState GameState.GameOver) "try again?" "start the game"}}
