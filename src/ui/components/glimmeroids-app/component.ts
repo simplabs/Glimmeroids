@@ -53,6 +53,7 @@ export default class Glimmeroids extends Component {
   bullets: Bullet[];
   particles: Particle[];
 
+  PRIZE_THRESHOLD = PRIZE_THRESHOLD;
   GameState = GameState;
 
   constructor(options: object) {
@@ -99,12 +100,8 @@ export default class Glimmeroids extends Component {
   }
 
   @tracked('state')
-  get prizeMessage() {
-    if (this.state.currentScore >= PRIZE_THRESHOLD) {
-      return `You win an Ember.js T-Shirt or mascot for scoring more than ${PRIZE_THRESHOLD} points!`;
-    } else {
-      return null;
-    }
+  get isPrizeWinner() {
+    return this.state.currentScore >= PRIZE_THRESHOLD;
   }
 
   @tracked('state')

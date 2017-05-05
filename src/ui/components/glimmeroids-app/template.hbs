@@ -10,8 +10,8 @@
       {{#if (eq state.gameState GameState.GameOver)}}
         <p>Game over, man!</p>
         <p>{{gameOverMessage}}</p>
-        {{#if prizeMessage}}
-          <p class="prize">{{{prizeMessage}}}</p>
+        {{#if isPrizeWinner}}
+          <p class="prize">You have won an Ember.js T-Shirt for scoring more than {{PRIZE_THRESHOLD}} points!</p>
         {{/if}}
       {{else}}
         <h1 class="logo">Glimmeroids</h1>
