@@ -15,6 +15,7 @@ const KEY = {
   W: 87,
   SPACE: 32,
   ENTER: 13,
+  ZERO: 48,
 };
 
 const INITIAL_ASTEROID_COUNT = 5;
@@ -45,6 +46,7 @@ export interface GlimmeroidsState {
   currentScore: number;
   topScore: number;
   gameState: GameState;
+  destroyAsteroids: Boolean
 }
 
 export default class Glimmeroids extends Component {
@@ -82,6 +84,7 @@ export default class Glimmeroids extends Component {
       currentScore: 0,
       topScore: localStorage.topscore || 0,
       gameState: GameState.Welcome,
+      destroyAsteroids: false
     };
     this.ship = [];
     this.asteroids = [];
@@ -138,10 +141,14 @@ export default class Glimmeroids extends Component {
     }
 
     let keys = this.state.keys;
+    console.log(event.keyCode);
     if (event.keyCode === KEY.LEFT   || event.keyCode === KEY.A) { keys.left  = value; }
     if (event.keyCode === KEY.RIGHT  || event.keyCode === KEY.D) { keys.right = value; }
     if (event.keyCode === KEY.UP     || event.keyCode === KEY.W) { keys.up    = value; }
     if (event.keyCode === KEY.SPACE) { keys.space = value; }
+    if (event.keyCode === KEY.ZERO)  {
+      this.state.destroyAsteroids = true;
+    }
 
     this.state = {
       ...this.state,
@@ -200,6 +207,14 @@ export default class Glimmeroids extends Component {
     this.updateObjects(this.asteroids, 'asteroids');
     this.updateObjects(this.bullets, 'bullets');
     this.updateObjects(this.ship, 'ship');
+
+    if (this.state.destroyAsteroids) {
+      this.state.destroyAsteroids = false;
+      this.state = {
+        ...this.state,
+        asteroidCount: 0
+      };
+    }
 
     context.restore();
 

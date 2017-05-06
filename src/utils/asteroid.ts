@@ -104,6 +104,11 @@ export default class Asteroid implements Entity {
       this.position.y = state.screen.height + this.radius;
     }
 
+    if (state.destroyAsteroids) {
+      this.destroy();
+      return;
+    }
+
     // Draw
     const context = state.context;
     context.save();
