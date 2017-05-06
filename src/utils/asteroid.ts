@@ -53,8 +53,8 @@ export default class Asteroid implements Entity {
           y: this.position.y + randomNumBetween(-this.radius / 4, this.radius / 4)
         },
         velocity: {
-          x: randomNumBetween(-1.5, 1.5),
-          y: randomNumBetween(-1.5, 1.5)
+          x: randomNumBetween(-2.5, 2.5),
+          y: randomNumBetween(-2.5, 2.5)
         }
       });
       this.create(particle, 'particles');

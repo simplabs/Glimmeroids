@@ -17,7 +17,7 @@ const KEY = {
   ENTER: 13,
 };
 
-const INITIAL_ASTEROID_COUNT = 3;
+const INITIAL_ASTEROID_COUNT = 5;
 
 enum GameState {
   Welcome = 0,
@@ -182,7 +182,7 @@ export default class Glimmeroids extends Component {
 
     // Next set of asteroids
     if (!this.asteroids.length) {
-      let count = this.state.asteroidCount + 1;
+      let count = this.state.asteroidCount + 2;
 
       this.state = {
         ...this.state,

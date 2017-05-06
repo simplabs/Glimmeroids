@@ -76,7 +76,7 @@ canvas {
   animation: blinker 1s linear infinite;
 
 
-  @keyframes blinker {  
+  @keyframes blinker {
     50% { opacity: 0; }
   }
 }
@@ -115,4 +115,8 @@ button:hover{
   margin-right: 0.75rem;
   vertical-align: middle;
   width: 2.75rem;
+}
+
+.tagline {
+  font-size: 2em;
 }
