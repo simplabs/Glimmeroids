@@ -13,7 +13,8 @@ const KEY = {
   A: 65,
   D: 68,
   W: 87,
-  SPACE: 32
+  SPACE: 32,
+  ENTER: 13,
 };
 
 const INITIAL_ASTEROID_COUNT = 3;
@@ -132,6 +133,10 @@ export default class Glimmeroids extends Component {
   }
 
   handleKeys(value: Boolean, event: KeyboardEvent) {
+    if (this.state.gameState !== GameState.Running && event.keyCode === KEY.ENTER && !value) {
+      this.startGame();
+    }
+
     let keys = this.state.keys;
     if (event.keyCode === KEY.LEFT   || event.keyCode === KEY.A) { keys.left  = value; }
     if (event.keyCode === KEY.RIGHT  || event.keyCode === KEY.D) { keys.right = value; }
