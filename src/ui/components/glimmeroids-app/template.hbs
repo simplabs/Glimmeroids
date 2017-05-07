@@ -13,6 +13,20 @@
         {{#if isPrizeWinner}}
           <p class="prize">You have won an Ember.js T-Shirt for scoring more than {{PRIZE_THRESHOLD}} points!</p>
         {{/if}}
+        {{#if state.shouldSubmitTopScorerName}}
+          <input type="text" value={{newTopScorerName}} onblur={{action updatePlayerName}} />
+          <button type="button" onclick={{action submitTopScorerName}}>Submit</button>
+        {{else}}
+          <h3>Top Scores</h3>
+          <ol>
+            {{#each topScorers key="@index" as |player|}}
+              <li class="topscore-panel__item">
+                <span class="topscore-panel__player-name">{{player.name}}</span>
+                <span class="topscore-panel__player-score">{{player.score}}</span>
+              </li>
+            {{/each}}
+          </ol>
+        {{/if}}
       {{else}}
         <h1 class="logo">Glimmeroids</h1>
         <p class="tagline">Score {{PRIZE_THRESHOLD}} points and win an Ember.js T-Shirt or Tomster mascot!</p>
@@ -25,7 +39,7 @@
 
 
   <span class="score current-score" >Score: {{state.currentScore}}</span>
-  <span class="score top-score" >Top Score: {{state.topScore}}</span>
+  <span class="score top-score" >Top Score: {{firstTopScore}}</span>
   <span class="controls" >
     Use [A][W][D] or [←][↑][→] to MOVE<br/>
     Use [SPACE] to SHOOT

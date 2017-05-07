@@ -120,3 +120,14 @@ button:hover{
 .tagline {
   font-size: 2em;
 }
+
+.topscore-panel__item:after {
+  clear: both
+}
+
+.topscore-panel__player-name {
+  float: left;
+}
+.topscore-panel__player-score {
+  float: right;
+}
