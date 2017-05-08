@@ -308,7 +308,10 @@ export default class Glimmeroids extends Component {
     this.newTopScorerName = event.target.value;
   }
 
-  submitTopScorerName() {
+  submitTopScorerName(event : KeyboardEvent) {
+    if (!this.newTopScorerName.trim()) {
+      return;
+    }
     let newScore = this.state.currentScore;
     let newPlayer = { name: this.newTopScorerName, score: newScore };
     //NOTE: There is a meta tag in an item of this._players which might
