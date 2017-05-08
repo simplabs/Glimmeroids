@@ -308,7 +308,7 @@ export default class Glimmeroids extends Component {
     this.newTopScorerName = event.target.value;
   }
 
-  submitTopScorerName(event : KeyboardEvent) {
+  submitTopScorerName() {
     if (!this.newTopScorerName.trim()) {
       return;
     }

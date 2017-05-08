@@ -19,15 +19,17 @@
             <button type="submit" onclick={{action submitTopScorerName}}>Submit</button>
           </div>
         {{else}}
-          <h3>Top Scores</h3>
-          <ol>
-            {{#each topScorers key="@index" as |player|}}
-              <li class="topscore-panel__item">
-                <span class="topscore-panel__player-name">{{player.name}}</span>
-                <span class="topscore-panel__player-score">{{player.score}}</span>
-              </li>
-            {{/each}}
-          </ol>
+          {{#if topScorers.length}}
+            <h3>Top Scores</h3>
+            <ol>
+              {{#each topScorers key="@index" as |player|}}
+                <li class="topscore-panel__item">
+                  <span class="topscore-panel__player-name">{{player.name}}</span>
+                  <span class="topscore-panel__player-score">{{player.score}}</span>
+                </li>
+              {{/each}}
+            </ol>
+          {{/if}}
         {{/if}}
       {{else}}
         <h1 class="logo">Glimmeroids</h1>
