@@ -121,6 +121,16 @@ button:hover{
   font-size: 2em;
 }
 
+.topscore-form__input {
+  background-color:rgba(0, 0, 0, 0);
+  color: white;
+  border: 4px white solid;
+  padding: 10px;
+  font-size: 1.5em;
+  width: 20vw;
+  height: 5vh;
+}
+
 .topscore-panel__item:after {
   clear: both
 }
@@ -128,6 +138,7 @@ button:hover{
 .topscore-panel__player-name {
   float: left;
 }
+
 .topscore-panel__player-score {
   float: right;
 }

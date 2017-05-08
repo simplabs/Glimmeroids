@@ -14,8 +14,10 @@
           <p class="prize">You have won an Ember.js T-Shirt for scoring more than {{PRIZE_THRESHOLD}} points!</p>
         {{/if}}
         {{#if state.shouldSubmitTopScorerName}}
-          <input type="text" value={{newTopScorerName}} onblur={{action updatePlayerName}} />
-          <button type="button" onclick={{action submitTopScorerName}}>Submit</button>
+          <div class="topscore-form" >
+            <input class="topscore-form__input" type="text" value={{newTopScorerName}} onblur={{action updatePlayerName}} />
+            <button type="submit" onclick={{action submitTopScorerName}}>Submit</button>
+          </div>
         {{else}}
           <h3>Top Scores</h3>
           <ol>
