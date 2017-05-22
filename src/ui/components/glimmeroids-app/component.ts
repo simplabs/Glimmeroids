@@ -52,13 +52,28 @@ export default class Glimmeroids extends Component {
   particles: Particle[];
 
   GameState = GameState;
+  
+  handleResize = () => {
+    this.state = {
+      ...this.state,
+      screen: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        ratio: window.devicePixelRatio || 1,
+      }
+    };
+  }
+
+  handleKeyUp = (event: KeyboardEvent) => {
+    this.handleKeys(false, event);
+  }
+
+  handleKeyDown = (event: KeyboardEvent) => {
+    this.handleKeys(true, event);
+  }
 
   constructor(options: object) {
     super(options);
-
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleKeyUp   = this.handleKeyUp.bind(this);
-    this.handleResize  = this.handleResize.bind(this);
 
     this.state = {
       screen: {
@@ -102,25 +117,6 @@ export default class Glimmeroids extends Component {
       width: this.state.screen.width * this.state.screen.ratio,
       height: this.state.screen.height * this.state.screen.ratio
     };
-  }
-
-  handleResize() {
-    this.state = {
-      ...this.state,
-      screen: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        ratio: window.devicePixelRatio || 1,
-      }
-    };
-  }
-
-  handleKeyUp(event: KeyboardEvent) {
-    this.handleKeys(false, event);
-  }
-
-  handleKeyDown(event: KeyboardEvent) {
-    this.handleKeys(true, event);
   }
 
   handleKeys(value: Boolean, event: KeyboardEvent) {
