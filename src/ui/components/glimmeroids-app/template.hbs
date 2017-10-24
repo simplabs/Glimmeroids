@@ -11,11 +11,11 @@
         <p>Game over, man!</p>
         <p>{{gameOverMessage}}</p>
         {{#if isPrizeWinner}}
-          <p class="prize">You have won an Ember.js T-Shirt for scoring more than {{PRIZE_THRESHOLD}} points!</p>
+          <p class="prize">You have won an Ember.js mascot for scoring more than {{PRIZE_THRESHOLD}} points!</p>
         {{/if}}
       {{else}}
         <h1 class="logo">Glimmeroids</h1>
-        <p>Score {{PRIZE_THRESHOLD}} points and win an Ember.js T-Shirt or Tomster mascot!</p>
+        <p>Score {{PRIZE_THRESHOLD}} points and win an Ember.js mascot!</p>
       {{/if}}
       <button onclick={{action startGame}}>
         {{if (eq state.gameState GameState.GameOver) "try again?" "start the game"}}
