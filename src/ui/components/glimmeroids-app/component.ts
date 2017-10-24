@@ -16,7 +16,7 @@ const KEY = {
   SPACE: 32
 };
 
-const INITIAL_ASTEROID_COUNT = 3;
+const INITIAL_ASTEROID_COUNT = 5;
 
 enum GameState {
   Welcome = 0,
