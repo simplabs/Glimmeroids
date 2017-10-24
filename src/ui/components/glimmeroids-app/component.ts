@@ -17,7 +17,7 @@ const KEY = {
   ENTER: 13,
 };
 
-const INITIAL_ASTEROID_COUNT = 3;
+const INITIAL_ASTEROID_COUNT = 5;
 
 enum GameState {
   Welcome = 0,

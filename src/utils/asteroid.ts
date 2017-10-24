@@ -23,8 +23,8 @@ export default class Asteroid implements Entity {
   constructor(args: any) {
     this.position = args.position;
     this.velocity = {
-      x: randomNumBetween(-1.5, 1.5),
-      y: randomNumBetween(-1.5, 1.5)
+      x: randomNumBetween(-3, 3),
+      y: randomNumBetween(-3, 3)
     };
     this.rotation = 0;
     this.rotationSpeed = randomNumBetween(-1, 1);
