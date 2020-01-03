@@ -76,7 +76,7 @@ canvas {
   animation: blinker 1s linear infinite;
 
 
-  @keyframes blinker {  
+  @keyframes blinker {
     50% { opacity: 0; }
   }
 }
@@ -115,4 +115,30 @@ button:hover{
   margin-right: 0.75rem;
   vertical-align: middle;
   width: 2.75rem;
+}
+
+.tagline {
+  font-size: 2em;
+}
+
+.topscore-form__input {
+  background-color:rgba(0, 0, 0, 0);
+  color: white;
+  border: 4px white solid;
+  padding: 10px;
+  font-size: 1.5em;
+  width: 20vw;
+  height: 5vh;
+}
+
+.topscore-panel__item:after {
+  clear: both
+}
+
+.topscore-panel__player-name {
+  float: left;
+}
+
+.topscore-panel__player-score {
+  float: right;
 }

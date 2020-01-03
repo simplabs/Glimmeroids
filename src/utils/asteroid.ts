@@ -53,8 +53,8 @@ export default class Asteroid implements Entity {
           y: this.position.y + randomNumBetween(-this.radius / 4, this.radius / 4)
         },
         velocity: {
-          x: randomNumBetween(-1.5, 1.5),
-          y: randomNumBetween(-1.5, 1.5)
+          x: randomNumBetween(-2.5, 2.5),
+          y: randomNumBetween(-2.5, 2.5)
         }
       });
       this.create(particle, 'particles');
@@ -102,6 +102,11 @@ export default class Asteroid implements Entity {
       this.position.y = -this.radius;
     } else if (this.position.y < -this.radius) {
       this.position.y = state.screen.height + this.radius;
+    }
+
+    if (state.destroyAsteroids) {
+      this.destroy();
+      return;
     }
 
     // Draw

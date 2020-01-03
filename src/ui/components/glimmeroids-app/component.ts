@@ -5,6 +5,7 @@ import { Entity } from '../../../utils/entity';
 import { randomNumBetweenExcluding } from '../../../utils/helper';
 import Particle from '../../../utils/Particle';
 import Ship from '../../../utils/ship';
+import Player, { sortPlayers } from '../../../utils/player';
 
 const KEY = {
   LEFT:  37,
@@ -15,9 +16,12 @@ const KEY = {
   W: 87,
   SPACE: 32,
   ENTER: 13,
+  ZERO: 48,
 };
 
-const INITIAL_ASTEROID_COUNT = 3;
+const INITIAL_ASTEROID_COUNT = 5;
+
+const TOP_SCORES_COUNT = 5;
 
 enum GameState {
   Welcome = 0,
@@ -26,6 +30,7 @@ enum GameState {
 }
 
 const PRIZE_THRESHOLD = 3000;
+const TOP_SCORERS_STORAGE_KEY = 'glimmeroids:topScorers';
 
 export interface GlimmeroidsState {
   screen: {
@@ -43,8 +48,10 @@ export interface GlimmeroidsState {
   };
   asteroidCount: number;
   currentScore: number;
-  topScore: number;
+  topScorers: Player[];
   gameState: GameState;
+  destroyAsteroids: Boolean;
+  shouldSubmitTopScorerName: Boolean;
 }
 
 export default class Glimmeroids extends Component {
@@ -53,12 +60,16 @@ export default class Glimmeroids extends Component {
   asteroids: Asteroid[];
   bullets: Bullet[];
   particles: Particle[];
+  @tracked _players: Player[];
+  @tracked newTopScorerName: string;
 
   PRIZE_THRESHOLD = PRIZE_THRESHOLD;
   GameState = GameState;
 
   constructor(options: object) {
     super(options);
+
+    this._players = this._initPlayers();
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp   = this.handleKeyUp.bind(this);
@@ -80,8 +91,10 @@ export default class Glimmeroids extends Component {
       },
       asteroidCount: INITIAL_ASTEROID_COUNT,
       currentScore: 0,
-      topScore: localStorage.topscore || 0,
+      topScorers: this.topScorers,
       gameState: GameState.Welcome,
+      destroyAsteroids: false,
+      shouldSubmitTopScorerName: false
     };
     this.ship = [];
     this.asteroids = [];
@@ -89,11 +102,11 @@ export default class Glimmeroids extends Component {
     this.particles = [];
   }
 
-  @tracked('state')
+  @tracked('state', 'firstTopScore')
   get gameOverMessage() {
     if (this.state.currentScore <= 0) {
       return '0 points... So sad.';
-    } else if (this.state.currentScore >= this.state.topScore) {
+    } else if (this.state.currentScore >= this.firstTopScore) {
       return 'New top score with ' + this.state.currentScore + ' points. Woo!';
     } else {
       return this.state.currentScore + ' Points though :)';
@@ -105,12 +118,36 @@ export default class Glimmeroids extends Component {
     return this.state.currentScore >= PRIZE_THRESHOLD;
   }
 
+  @tracked('_players')
+  get topScorers() : Player[] {
+    let sortedPlayers:Player[] =  this._players.sort(sortPlayers)
+    return sortedPlayers.slice(0, TOP_SCORES_COUNT);
+  }
+
+  @tracked('topScorers')
+  get firstTopScore() {
+    let len = this.topScorers.length;
+    return len ? this.topScorers[0].score : 0;
+  }
+
+  @tracked('topScorers')
+  get lastTopScore() {
+    let len = this.topScorers.length;
+    return len ? this.topScorers[len-1].score : 0;
+  }
+
   @tracked('state')
   get canvasSize() {
     return {
       width: this.state.screen.width * this.state.screen.ratio,
       height: this.state.screen.height * this.state.screen.ratio
     };
+  }
+
+  _initPlayers() {
+    let storedTopScorers:string = localStorage.getItem(TOP_SCORERS_STORAGE_KEY);
+    let topScorers:Player[] = storedTopScorers ? JSON.parse(storedTopScorers) : [];
+    return topScorers;
   }
 
   handleResize() {
@@ -142,6 +179,9 @@ export default class Glimmeroids extends Component {
     if (event.keyCode === KEY.RIGHT  || event.keyCode === KEY.D) { keys.right = value; }
     if (event.keyCode === KEY.UP     || event.keyCode === KEY.W) { keys.up    = value; }
     if (event.keyCode === KEY.SPACE) { keys.space = value; }
+    if (event.keyCode === KEY.ZERO)  {
+      this.state.destroyAsteroids = true;
+    }
 
     this.state = {
       ...this.state,
@@ -182,7 +222,7 @@ export default class Glimmeroids extends Component {
 
     // Next set of asteroids
     if (!this.asteroids.length) {
-      let count = this.state.asteroidCount + 1;
+      let count = this.state.asteroidCount + 2;
 
       this.state = {
         ...this.state,
@@ -200,6 +240,14 @@ export default class Glimmeroids extends Component {
     this.updateObjects(this.asteroids, 'asteroids');
     this.updateObjects(this.bullets, 'bullets');
     this.updateObjects(this.ship, 'ship');
+
+    if (this.state.destroyAsteroids) {
+      this.state.destroyAsteroids = false;
+      this.state = {
+        ...this.state,
+        asteroidCount: 0
+      };
+    }
 
     context.restore();
 
@@ -241,18 +289,42 @@ export default class Glimmeroids extends Component {
   }
 
   gameOver() {
-    this.state = {
-      ...this.state,
-      gameState: GameState.GameOver,
-    };
-
-    // Replace top score
-    if (this.state.currentScore > this.state.topScore) {
+    let newScore = this.state.currentScore;
+    if (newScore > this.lastTopScore) {
       this.state = {
         ...this.state,
-        topScore: this.state.currentScore
+        gameState: GameState.GameOver,
+        shouldSubmitTopScorerName: true
       };
-      localStorage.setItem('topscore', String(this.state.currentScore));
+    } else {
+      this.state = {
+        ...this.state,
+        gameState: GameState.GameOver
+      };
+    }
+  }
+
+  updatePlayerName(event : KeyboardEvent) {
+    this.newTopScorerName = event.target.value;
+  }
+
+  submitTopScorerName() {
+    if (!this.newTopScorerName.trim()) {
+      return;
+    }
+    let newScore = this.state.currentScore;
+    let newPlayer = { name: this.newTopScorerName, score: newScore };
+    //NOTE: There is a meta tag in an item of this._players which might
+    // cause the JSON serialization error
+    let noMetaTagPlayers = this._players.map(({ name, score }) => {
+      return { name, score };
+    });
+    this._players = [...noMetaTagPlayers, newPlayer];
+    localStorage.setItem(TOP_SCORERS_STORAGE_KEY, JSON.stringify(this.topScorers));
+    this.newTopScorerName = '';
+    this.state = {
+      ...this.state,
+      shouldSubmitTopScorerName: false,
     }
   }
 
