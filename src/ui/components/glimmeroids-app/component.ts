@@ -181,8 +181,8 @@ export default class Glimmeroids extends Component {
     context.globalAlpha = 1;
 
     // Next set of asteroids
-    if (!this.asteroids.length) {
-      let count = this.state.asteroidCount + 1;
+    if (this.asteroids.length < 2) {
+      let count = this.state.asteroidCount * 2;
 
       this.state = {
         ...this.state,
